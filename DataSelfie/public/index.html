@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>
+            Data Selfie App
+        </title>
+    </head>
+    <body>
+        <h1>Data Selfie Application</h1>
+        <p>Hello</p>
+
+        <script>
+            if('geolocation' in navigator){
+                console.log("available");
+                navigator.geolocation.getCurrentPosition( position => { // '=>' means function(position)
+                    console.log(position.coords.latitude);
+                    console.log(position.coords.longitude);
+                });
+            } else {
+                console.log("not available");
+            }
+        </script>
+    </body>
+</html>
