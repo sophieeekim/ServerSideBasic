@@ -9,18 +9,42 @@
     </head>
     <body>
         <h1>Data Selfie Application</h1>
-        <p>Hello</p>
+        <p>
+        Latitude : <span id="lat"></span>˚<br>
+        Longitude : <span id="lng"></span>˚
+        </p>
 
         <script>
             if('geolocation' in navigator){
                 console.log("available");
-                navigator.geolocation.getCurrentPosition( position => { // '=>' means function(position)
-                    console.log(position.coords.latitude);
-                    console.log(position.coords.longitude);
+                navigator.geolocation.getCurrentPosition(async position => { // '=>' means function(position)
+                    const lat = position.coords.latitude;
+                    const lng =  position.coords.longitude;
+                    document.getElementById('lat').innerText = lat.toFixed(2);
+                    document.getElementById('lng').innerText = lng.toFixed(2); 
+
+                    const data = {lat, lng};
+                    const options = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body:JSON.stringify(data)
+                    };
+                    const response = await fetch('/api', options);
+                    const responseData = await response.json();
+                    console.log(responseData);
                 });
             } else {
                 console.log("not available");
             }
+
+            
+            function init(){
+
+            }
+
+            init();
         </script>
     </body>
 </html>
