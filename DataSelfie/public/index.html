@@ -19,7 +19,6 @@
             const submitBtn = document.getElementById('submit');
 
             
-
             function handleSubmit(){
                 if('geolocation' in navigator){
                 console.log("available");
@@ -30,17 +29,14 @@
                     document.getElementById('lng').innerText = lng.toFixed(2); 
 
                     const timestamp = Date.now();
-
                     const data = {lat, lng, timestamp};
-
-                    dataArray.push(data);
 
                     const options = {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body:JSON.stringify(dataArray)
+                        body:JSON.stringify(data)
                     };
                     const response = await fetch('/api', options);
                     const responseData = await response.json();

@@ -1,34 +1,31 @@
 //index.js
 const express = require('express');
+const Datastore = require('nedb'); //import node package
 const app = express();
 app.listen(3000, () => console.log('listening at port 3000'));
 app.use(express.static('public'));  //serves up any files in public folder
 app.use(express.json({limit:'1mb'})); //parse json data from client side
  
+const database  = new Datastore('database.db'); // instead of simple array
+database.loadDatabase(); 
+// load the file / data from the previous time the server ran into memory
+// key aspect of working with database is having every record assosiated with a unique key "ID"
+
+
 //app post method
 app.post('/api', (request, response) => { // receiving data from client side
-    console.log(request.body);
+    console.log("I got a request!");
     const data = request.body;
-    const dataResponse = [];
-    
-    data.forEach (element => {
-        const dataElement = {
-            status: 'success',
-            latitude: element.lat,
-            longitude: element.lng,
-            timestamp: element.timestamp
-        };
-        dataResponse.push(dataElement);
-    })
-    
-    response.json(dataResponse);
-    // data.forEach(element => {
-    //     response.json({ // sending to client
-    //         status: 'success',
-    //         latitude: element.lat,
-    //         longitude: element.lng,
-    //         timestamp: element.timestamp
-    //     });
-    // });
-    
+    database.insert(data);
+    //instead of "push", "insert" puts data into database.db 
+    response.json({
+        status: 'success',
+        latitude: data.lat,
+        longitude: data.lng,
+        timestamp: data.timestamp
+    });
+   
 });
+
+//use MongoDB API 
+//npm install nedb
