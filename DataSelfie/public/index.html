@@ -13,9 +13,15 @@
         Latitude : <span id="lat"></span>˚<br>
         Longitude : <span id="lng"></span>˚
         </p>
-
+        <button id="submit">submit</button>
         <script>
-            if('geolocation' in navigator){
+            const dataArray = [];
+            const submitBtn = document.getElementById('submit');
+
+            
+
+            function handleSubmit(){
+                if('geolocation' in navigator){
                 console.log("available");
                 navigator.geolocation.getCurrentPosition(async position => { // '=>' means function(position)
                     const lat = position.coords.latitude;
@@ -23,25 +29,33 @@
                     document.getElementById('lat').innerText = lat.toFixed(2);
                     document.getElementById('lng').innerText = lng.toFixed(2); 
 
-                    const data = {lat, lng};
+                    const timestamp = Date.now();
+
+                    const data = {lat, lng, timestamp};
+
+                    dataArray.push(data);
+
                     const options = {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body:JSON.stringify(data)
+                        body:JSON.stringify(dataArray)
                     };
                     const response = await fetch('/api', options);
                     const responseData = await response.json();
                     console.log(responseData);
-                });
-            } else {
-                console.log("not available");
-            }
+                    });
+                } else {
+                    console.log("not available");
+                }
+            };
+
+            
 
             
             function init(){
-
+                submitBtn.addEventListener('click', handleSubmit);
             }
 
             init();
