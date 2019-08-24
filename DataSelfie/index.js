@@ -17,6 +17,7 @@ database.loadDatabase();
 app.get('/api', (request, response) => {
     database.find({},(err, data) => {
         if(err){
+            console.log("error");
             response.end();
             return;
         } else {
@@ -31,13 +32,7 @@ app.post('/api', (request, response) => { // receiving data from client side
     const data = request.body;
     database.insert(data);
     //instead of "push", "insert" puts data into database.db 
-    response.json({
-        status: 'success',
-        latitude: data.lat,
-        longitude: data.lng,
-        mood: data.mood,
-        timestamp: data.timestamp
-    });
+    response.json(data);
    
 });
 

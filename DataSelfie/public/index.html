@@ -3,6 +3,8 @@
     <head>
         <meta charset="UTF-8"/>
         <link rel="stylesheet" href="style.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js" integrity="sha256-WVsM3xrcqyuFNF3W1qtIKbHFsD0977nDQA8DCMp1zCw=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js" integrity="sha256-2/3R3NV5zryj0fDjD3cDh+SNiWQ/TJiMVZzAo5FrhiU=" crossorigin="anonymous"></script>
         <title>
             Data Selfie App
         </title>
@@ -14,87 +16,101 @@
         Longitude : <span id="lng"></span>˚
         </p>
 
-        <p>How are you today?</p>
-        <input id="mood" type="text" placeholder="Mood today?👀"/>
-        <button id="submit">submit</button>
-
+        <div id="form">
+            <input id="mood" type="text" placeholder="Mood today?👀"/>
+            <button id="submit">submit</button>
+        </div>
+        <div id="dataSet">
+        </div>
         
         <script>
+            let lat, lng, video;
             const submitBtn = document.getElementById('submit');
-
+            
+            function setup(){ //p5 setup
+                noCanvas();
+                video = createCapture(VIDEO);
+                video.size(320, 240);
+                
+            }
+            
             function getMood(){
                 const input = document.getElementById('mood');
                 const mood = input.value;
                 input.value = "";
                 return mood;
             }
-            
-            if('geolocation' in navigator){
-            navigator.geolocation.getCurrentPosition(position => { 
-                    const lat = position.coords.latitude;
-                    const lng =  position.coords.longitude;
-                    document.getElementById('lat').innerText = lat.toFixed(2);
-                    document.getElementById('lng').innerText = lng.toFixed(2); 
-                });
+
+            function getTime(){
+                const timestamp = Date.now();
+                return timestamp;
+            }
+
+            function getPosition(){
+                if('geolocation' in navigator){
+                    console.log(lat, lng);
+                navigator.geolocation.getCurrentPosition(position => { 
+                        lat = position.coords.latitude;
+                        lng =  position.coords.longitude;
+                        console.log(lat, lng);
+                        document.getElementById('lat').innerText = lat.toFixed(2);
+                        document.getElementById('lng').innerText = lng.toFixed(2); 
+                    });
+                } else {
+                    console.log("unavailable");
+                }
             }
 
             async function getData(){
+                console.log("get data");
                 const response = await fetch('/api');
                 const data = await response.json();
                 console.log(data);
 
-                for (item of data) {
+                const currentData = document.getElementById('dataSet')
+                currentData.innerHTML = "";
+
+                data.forEach(item => {
                     const root = document.createElement('div');
                     const mood = document.createElement('div');
                     const geo = document.createElement('div');
                     const date = document.createElement('div');
+                    const image = document.createElement('img');
 
                     mood.textContent = `mood : ${item.mood}` ;
                     geo.textContent = `lat : ${item.lat}˚, lng : ${item.lng}` ;
                     const dateString = new Date(item.timestamp).toLocaleString();
                     date.textContent = dateString;
+                    image.src = item.image64;
 
-                    root.append(mood, geo, date);
-                    document.body.append(root);
-
-
-                }
+                    root.append(mood, geo, date, image);
+                    root.classList.add('data');
+                    document.getElementById('dataSet').append(root);
+                });
             }
 
-            function postData(){
-                if('geolocation' in navigator){
-                console.log("available");
-                navigator.geolocation.getCurrentPosition(async position => { // '=>' means function(position)
-                    const lat = position.coords.latitude;
-                    const lng =  position.coords.longitude;
-            
-                    document.getElementById('lat').innerText = lat.toFixed(2);
-                    document.getElementById('lng').innerText = lng.toFixed(2); 
+            async function postData(){
+                const mood = getMood();
+                const timestamp = getTime();
+                video.loadPixels();
+                const image64 = video.canvas.toDataURL(); //video to base64
+                
 
-                    const mood = getMood();
-                    const timestamp = Date.now();
-                    const data = {lat, lng, timestamp, mood};
-
-                    const options = {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body:JSON.stringify(data)
-                    };
-                    const response = await fetch('/api', options);
-                    const responseData = await response.json();
-                    // console.log(responseData);
-                    });
-                } else {
-                    console.log("not available");
-                }
+                const data = {lat, lng,image64 , mood, timestamp};
+                const options = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body:JSON.stringify(data)
+                };
+                const response = await fetch('/api', options);
+                const responseData = await response.json();
+                getData();
             };
-
-            
-
-            
+   
             function init(){
+                getPosition();
                 getData();
                 submitBtn.addEventListener('click', postData);
             }

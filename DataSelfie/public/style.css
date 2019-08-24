@@ -1,4 +1,39 @@
-h1, p {
+body {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+}
+h1, p , div, input, button{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #34495e;
+}
+
+input {
+    outline: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-size: 1em;
+}
+
+button {
+    outline: none;
+    border-radius: 10px;
+    padding: 0.5vw 2vh ;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #34495e;
+    color:#fff;
+
+}
+
+.data {
+    display: block;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    
 }
