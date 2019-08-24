@@ -1,6 +1,8 @@
-//index.js
+
 const express = require('express');
-const Datastore = require('nedb'); //import node package
+const Datastore = require('nedb'); 
+//import node package
+
 const app = express();
 app.listen(3000, () => console.log('listening at port 3000'));
 app.use(express.static('public'));  //serves up any files in public folder
@@ -11,7 +13,18 @@ database.loadDatabase();
 // load the file / data from the previous time the server ran into memory
 // key aspect of working with database is having every record assosiated with a unique key "ID"
 
-
+//app get method
+app.get('/api', (request, response) => {
+    database.find({},(err, data) => {
+        if(err){
+            response.end();
+            return;
+        } else {
+            response.json(data);
+        }
+    });
+   
+});
 //app post method
 app.post('/api', (request, response) => { // receiving data from client side
     console.log("I got a request!");
@@ -22,6 +35,7 @@ app.post('/api', (request, response) => { // receiving data from client side
         status: 'success',
         latitude: data.lat,
         longitude: data.lng,
+        mood: data.mood,
         timestamp: data.timestamp
     });
    

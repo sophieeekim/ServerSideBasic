@@ -13,23 +13,67 @@
         Latitude : <span id="lat"></span>˚<br>
         Longitude : <span id="lng"></span>˚
         </p>
+
+        <p>How are you today?</p>
+        <input id="mood" type="text" placeholder="Mood today?👀"/>
         <button id="submit">submit</button>
+
+        
         <script>
-            const dataArray = [];
             const submitBtn = document.getElementById('submit');
 
+            function getMood(){
+                const input = document.getElementById('mood');
+                const mood = input.value;
+                input.value = "";
+                return mood;
+            }
             
-            function handleSubmit(){
+            if('geolocation' in navigator){
+            navigator.geolocation.getCurrentPosition(position => { 
+                    const lat = position.coords.latitude;
+                    const lng =  position.coords.longitude;
+                    document.getElementById('lat').innerText = lat.toFixed(2);
+                    document.getElementById('lng').innerText = lng.toFixed(2); 
+                });
+            }
+
+            async function getData(){
+                const response = await fetch('/api');
+                const data = await response.json();
+                console.log(data);
+
+                for (item of data) {
+                    const root = document.createElement('div');
+                    const mood = document.createElement('div');
+                    const geo = document.createElement('div');
+                    const date = document.createElement('div');
+
+                    mood.textContent = `mood : ${item.mood}` ;
+                    geo.textContent = `lat : ${item.lat}˚, lng : ${item.lng}` ;
+                    const dateString = new Date(item.timestamp).toLocaleString();
+                    date.textContent = dateString;
+
+                    root.append(mood, geo, date);
+                    document.body.append(root);
+
+
+                }
+            }
+
+            function postData(){
                 if('geolocation' in navigator){
                 console.log("available");
                 navigator.geolocation.getCurrentPosition(async position => { // '=>' means function(position)
                     const lat = position.coords.latitude;
                     const lng =  position.coords.longitude;
+            
                     document.getElementById('lat').innerText = lat.toFixed(2);
                     document.getElementById('lng').innerText = lng.toFixed(2); 
 
+                    const mood = getMood();
                     const timestamp = Date.now();
-                    const data = {lat, lng, timestamp};
+                    const data = {lat, lng, timestamp, mood};
 
                     const options = {
                         method: 'POST',
@@ -40,7 +84,7 @@
                     };
                     const response = await fetch('/api', options);
                     const responseData = await response.json();
-                    console.log(responseData);
+                    // console.log(responseData);
                     });
                 } else {
                     console.log("not available");
@@ -51,7 +95,8 @@
 
             
             function init(){
-                submitBtn.addEventListener('click', handleSubmit);
+                getData();
+                submitBtn.addEventListener('click', postData);
             }
 
             init();
