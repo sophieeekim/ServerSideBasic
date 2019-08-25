@@ -11,16 +11,18 @@
     </head>
     <body>
         <h1>Data Selfie Application</h1>
-        <p>
-        Latitude : <span id="lat"></span>˚<br>
-        Longitude : <span id="lng"></span>˚
-        </p>
-
-        <div id="form">
-            <input id="mood" type="text" placeholder="Mood today?👀"/>
-            <button id="submit">submit</button>
+        <button id="tryAgain">Try again?</button>
+        <div id="dataSet">
         </div>
         
-        <script src="/sketch.js"></script>
+        <script src="/logs.js"></script>
+        <script>
+        const tryAgainBtn = document.getElementById('tryAgain');
+        tryAgainBtn.addEventListener("click", navigateToIndex);
+
+        function navigateToIndex(){
+            window.location.href("/index.html");
+        }
+        </script>
     </body>
 </html>
