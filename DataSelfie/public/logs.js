@@ -14,7 +14,7 @@ async function getData() {
         const geo = document.createElement('div');
         const date = document.createElement('div');
 
-        mood.textContent = `mood : ${item.mood}`;
+        mood.textContent = `${item.mood}`;
         geo.textContent = `lat : ${item.lat}˚, lng : ${item.lng}`;
         const dateString = new Date(item.timestamp).toLocaleString();
         date.textContent = dateString;
