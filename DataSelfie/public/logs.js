@@ -9,18 +9,21 @@ async function getData() {
 
     data.forEach(item => {
         const root = document.createElement('div');
+        const description = document.createElement('div');
         const image = document.createElement('img');
-        const mood = document.createElement('div');
-        const geo = document.createElement('div');
-        const date = document.createElement('div');
+        const mood = document.createElement('p');
+        const geo = document.createElement('p');
+        const date = document.createElement('p');
 
         mood.textContent = `${item.mood}`;
-        geo.textContent = `lat : ${item.lat}˚, lng : ${item.lng}`;
+        geo.textContent = `lat : ${item.lat.toFixed(2)}˚, lng : ${item.lng.toFixed(2)}`;
         const dateString = new Date(item.timestamp).toLocaleString();
         date.textContent = dateString;
         image.src = item.image64;
+        description.classList.add('description');
 
-        root.append(image, mood, geo, date);
+        description.append(mood,geo,date);
+        root.append(image, description);
         root.classList.add('data');
         document.getElementById('dataSet').append(root);
     });
