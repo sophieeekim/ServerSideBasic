@@ -3,9 +3,11 @@ body {
     flex-direction: column;
     justify-items: center;
     align-items: center;
+    margin:0;
 }
+
 h1, p , div, input, button{
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     color: #212122;
 }
 
@@ -21,34 +23,62 @@ input {
     font-size: 1em;
 }
 
-button {
+.add {
     outline: none;
-    border-radius: 10px;
-    padding: 0.5vw 2vh ;
-    font-size: 1em;
     cursor: pointer;
 }
 
-button:hover {
-    background-color: #212122;
-    color:#fff;
-
+.add:hover {
+   opacity: 0.5;
 }
 
 .title{
-    margin-top: 5vh;
-    margin-bottom: 5vh;
-    text-align: center;
+    top:0;
+    left:0;
+    right:0;
+    height: max-content;
+    padding:1vh 5vw 1vh 10vw;
+    width:100%;
+    text-align: left;
+    background-color: #8067ff;
+}
+
+.title h1 {
+    font-size: 4vh;
+    
+}
+
+.title p {
+    font-size: 2vh;
+    
+}
+.title p, .title h1 {
+    display: inline;
+    color: #ffffff;
+    padding: 0;
 }
 .data {
     display: inline-block;
     margin: 2vh;
     box-shadow:0px 0px 10px #d1d1d6 ;
+    width: max-content;
     
 }
 
+
+
+#dataSet {
+    display:flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+    justify-content: flex-start;
+    align-content: center;
+}
+
+
 .description {
     padding:10px;
+    
 }
 .data p {
     margin: 0;
