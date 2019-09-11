@@ -57,16 +57,18 @@ input {
     color: #ffffff;
     padding: 0;
 }
+
 .data {
     display: inline-block;
     margin: 2vh;
     box-shadow:0px 0px 10px #d1d1d6 ;
     width: max-content;
-    
+    border-radius: 10px;
 }
-
-
-
+.data img {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
 #dataSet {
     display:flex;
     flex-direction: row;
@@ -75,13 +77,22 @@ input {
     align-content: center;
 }
 
+.date {
+    float: right;
+    font-size: 0.8em;
+    padding:10px;
+    color: #8e8e93;
+}
 
+.mood {
+    color: #363636;
+}
 .description {
     padding:10px;
-    
 }
-.data p {
+.description p {
     margin: 0;
+    
 }
 
 

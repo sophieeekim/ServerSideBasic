@@ -16,11 +16,16 @@ async function getData() {
         const date = document.createElement('p');
 
         mood.textContent = `${item.mood}`;
+        if(item.lat && item.lng){
         geo.textContent = `lat : ${item.lat.toFixed(2)}˚, lng : ${item.lng.toFixed(2)}`;
+        }
         const dateString = new Date(item.timestamp).toLocaleString();
         date.textContent = dateString;
         image.src = item.image64;
+
         description.classList.add('description');
+        date.classList.add('date');
+        mood.classList.add('mood');
 
         description.append(mood,geo,date);
         root.append(image, description);

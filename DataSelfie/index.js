@@ -2,7 +2,7 @@
 const express = require('express');
 const Datastore = require('nedb'); 
 //import node package
-
+const fs = require('fs');
 const app = express();
 app.listen(3000, () => console.log('listening at port 3000'));
 app.use(express.static('public'));  //serves up any files in public folder
@@ -30,6 +30,15 @@ app.get('/api', (request, response) => {
 app.post('/api', (request, response) => { // receiving data from client side
     console.log("I got a request!");
     const data = request.body;
+  
+    let image = data.image64;
+    const imageData = image.replace(/^data:image\/\w+;base64,/, "");
+    const buf = new Buffer.from(imageData, 'base64');
+    const name = imageData.slice(0,20);
+    fs.writeFile(`public/images/${name}.png`, buf, function(err, result) {
+        if(err) console.log('error', err);
+      });
+
     database.insert(data);
     //instead of "push", "insert" puts data into database.db 
     response.json(data);
