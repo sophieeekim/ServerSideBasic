@@ -24,11 +24,24 @@ input {
 }
 
 .add {
-    outline: none;
+    position: absolute;
+    z-index: 10;
+    bottom: 0;
+    right:0;
+    margin: 5vh;
     cursor: pointer;
+    
+}
+
+.add img{
+    width: 7vh;
+    border-radius: 50%;
+    box-shadow:0px 0px 10px #8e8e93 ;
+    
 }
 
 .add:hover {
+
    opacity: 0.5;
 }
 

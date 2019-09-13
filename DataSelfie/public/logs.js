@@ -21,7 +21,7 @@ async function getData() {
         }
         const dateString = new Date(item.timestamp).toLocaleString();
         date.textContent = dateString;
-        image.src = item.image64;
+        image.src = item.url;
 
         description.classList.add('description');
         date.classList.add('date');

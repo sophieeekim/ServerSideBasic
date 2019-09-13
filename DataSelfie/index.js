@@ -13,6 +13,13 @@ database.loadDatabase();
 // load the file / data from the previous time the server ran into memory
 // key aspect of working with database is having every record assosiated with a unique key "ID"
 
+let index = 0;
+database.count({}, (err, count ) => { // counting the current database data
+    index = count;
+    console.log(index);
+});
+
+
 //app get method
 app.get('/api', (request, response) => {
     database.find({},(err, data) => {
@@ -30,18 +37,30 @@ app.get('/api', (request, response) => {
 app.post('/api', (request, response) => { // receiving data from client side
     console.log("I got a request!");
     const data = request.body;
-  
     let image = data.image64;
+    index++;
+    
     const imageData = image.replace(/^data:image\/\w+;base64,/, "");
     const buf = new Buffer.from(imageData, 'base64');
-    const name = imageData.slice(0,20);
-    fs.writeFile(`public/images/${name}.png`, buf, function(err, result) {
+    const fileName = `image${index}`;
+    let path = `public/images/${fileName}.png`;
+    fs.writeFile(path, buf, function(err, result) {
         if(err) console.log('error', err);
-      });
+    });
+    path = `images/${fileName}.png`;
+    
+    const newData = {
+        index: index,
+        lat: data.lat,
+        lng: data.lng,
+        url: path,
+        mood: data.mood,
+        timestamp: data.timestamp
+    };
 
-    database.insert(data);
+    database.insert(newData);
     //instead of "push", "insert" puts data into database.db 
-    response.json(data);
+    response.json(newData);
    
 });
 
