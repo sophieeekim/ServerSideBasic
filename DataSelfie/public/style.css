@@ -24,7 +24,7 @@ input {
 }
 
 .add {
-    position: absolute;
+    position: fixed;
     z-index: 10;
     bottom: 0;
     right:0;
@@ -41,8 +41,17 @@ input {
 }
 
 .add:hover {
+    animation: addHover 0.5s ease forwards;
+}
 
-   opacity: 0.5;
+@keyframes addHover {
+    from {
+        transform: translateY(0%);
+      }
+    
+      to {
+        transform: translateY(-20%);
+      }
 }
 
 .title{
@@ -108,5 +117,9 @@ input {
     
 }
 
+#map {
+    height: 400px;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+}
 
 
